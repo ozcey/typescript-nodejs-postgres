@@ -13,11 +13,8 @@ export const createApplicant = async (req: Request, res: Response) => {
         degree,
         categories,
         languages,
-        address
+        address: { street, city, state, zip_code }
     } = req.body;
-
-    const { street, city, state, zip_code } = address;
-    console.log('body', req.body);
 
     let applicant;
 
@@ -62,7 +59,7 @@ export const createApplicant = async (req: Request, res: Response) => {
 export const findAllApplicants = async (req: Request, res: Response) => {
     let applicants;
     try {
-        applicants = await Applicant.findAll();
+        applicants = await Applicant.findAll({ include: Address });
     } catch (error) {
         return res.status(404).json({
             message: `An error occurred while fetching applicants`,
@@ -78,12 +75,18 @@ export const findApplicantById = async (req: Request, res: Response) => {
     const id = req.params.id;
     let applicant;
     try {
-        applicant = await Applicant.findByPk(id);
+        applicant = await Applicant.findByPk(id, { include: Address });
+        if (!applicant) {
+            return res.status(404).json({
+                message: `Applicant not found with id ${id}`
+            });
+        }
     } catch (error) {
-        return res.status(404).json({
-            message: `Applicant not found with id ${id}`
+        return res.status(500).json({
+            message: `An error occurred while fetching applicant`
         });
     }
+
     return res.status(200).json({
         applicant: applicant
     });
@@ -92,7 +95,7 @@ export const findApplicantById = async (req: Request, res: Response) => {
 // TODO: fix update applicant 
 export const updateApplicant = async (req: Request, res: Response) => {
     const id = +req.params.id;
-    const applicant = await Applicant.findByPk(id);
+    const applicant = await Applicant.findByPk(id, { include: Address });
     if (!applicant) {
         return res.status(404).json({
             message: `Applicant not found with id ${id}`
@@ -109,10 +112,9 @@ export const updateApplicant = async (req: Request, res: Response) => {
         degree,
         categories,
         languages,
-        address
+        address: { street, city, state, zip_code }
     } = req.body;
 
-    const { street, city, state, zip_code } = address;
     console.log('body', req.body);
 
     let updatedApplicant;
