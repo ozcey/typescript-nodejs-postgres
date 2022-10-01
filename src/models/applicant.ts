@@ -1,5 +1,6 @@
 import sequelize from "../db/db_config";
 import Sequelize, { DataTypes } from "sequelize";
+import Address  from "./address";
 
 const Applicant = sequelize.define('applicants', {
     id: {
@@ -45,5 +46,11 @@ const Applicant = sequelize.define('applicants', {
         allowNull: false
     }
 });
+
+Address.belongsTo(Applicant, {
+    constraints: true,
+    onDelete: 'CASCADE'
+});
+Applicant.hasMany(Address);
 
 export default Applicant;

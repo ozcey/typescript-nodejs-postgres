@@ -4,7 +4,7 @@
   "description": "TypeScript, Node JS, PostgreSQL Rest Backend API",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --files src/app.ts",
+    "dev": "nodemon src/app.ts",
     "start": "node lib/app.js",
     "build": "tsc -p ."
   },

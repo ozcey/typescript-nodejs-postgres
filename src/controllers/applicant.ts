@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import Address from "../models/address";
 import Applicant from "../models/applicant";
-
 
 export const createApplicant = async (req: Request, res: Response) => {
     const {
@@ -12,12 +12,17 @@ export const createApplicant = async (req: Request, res: Response) => {
         gender,
         degree,
         categories,
-        languages
+        languages,
+        address
     } = req.body;
+
+    const { street, city, state, zip_code } = address;
+    console.log('body', req.body);
 
     let applicant;
 
     try {
+
         applicant = await Applicant.create({
             first_name,
             last_name,
@@ -27,14 +32,27 @@ export const createApplicant = async (req: Request, res: Response) => {
             gender,
             degree,
             categories,
-            languages
-        });
+            languages,
+            addresses: [
+                {
+                    street,
+                    city,
+                    state,
+                    zip_code
+                }
+            ]
+        },
+            {
+                include: Address
+            }
+        );
     } catch (error) {
-        res.status(400).json({
-            message: 'An error occurred while creating applicant'
+        return res.status(400).json({
+            message: 'An error occurred while creating applicant',
+            error: error
         });
     };
-    res.status(201).json({
+    return res.status(201).json({
         message: 'Applicant created successfully!',
         data: applicant
     });
@@ -46,11 +64,12 @@ export const findAllApplicants = async (req: Request, res: Response) => {
     try {
         applicants = await Applicant.findAll();
     } catch (error) {
-        res.status(404).json({
-            message: `An error occurred while fetching applicants`
+        return res.status(404).json({
+            message: `An error occurred while fetching applicants`,
+            error: error
         });
     }
-    res.status(200).json({
+    return res.status(200).json({
         applicants
     });
 };
@@ -61,17 +80,18 @@ export const findApplicantById = async (req: Request, res: Response) => {
     try {
         applicant = await Applicant.findByPk(id);
     } catch (error) {
-        res.status(404).json({
+        return res.status(404).json({
             message: `Applicant not found with id ${id}`
         });
     }
-    res.status(200).json({
+    return res.status(200).json({
         applicant: applicant
     });
 };
 
+// TODO: fix update applicant 
 export const updateApplicant = async (req: Request, res: Response) => {
-    const id = req.params.id;
+    const id = +req.params.id;
     const applicant = await Applicant.findByPk(id);
     if (!applicant) {
         return res.status(404).json({
@@ -88,8 +108,12 @@ export const updateApplicant = async (req: Request, res: Response) => {
         gender,
         degree,
         categories,
-        languages
+        languages,
+        address
     } = req.body;
+
+    const { street, city, state, zip_code } = address;
+    console.log('body', req.body);
 
     let updatedApplicant;
 
@@ -103,16 +127,27 @@ export const updateApplicant = async (req: Request, res: Response) => {
             gender,
             degree,
             categories,
-            languages
-        }, {
-            where: { id: id }
-        });
+            languages,
+            addresses: [
+                {
+                    street,
+                    city,
+                    state,
+                    zip_code
+                }
+            ]
+        },
+            {
+                where: { id: id }
+            }
+        );
     } catch (error) {
-        res.status(400).json({
-            message: 'An error occurred while updating applicant'
+        return res.status(400).json({
+            message: 'An error occurred while updating applicant',
+            error: error
         });
     };
-    res.status(200).json({
+    return res.status(200).json({
         message: 'Applicant updated successfully!',
         data: updateApplicant
     });
@@ -120,7 +155,7 @@ export const updateApplicant = async (req: Request, res: Response) => {
 };
 
 export const deleteApplicant = async (req: Request, res: Response) => {
-    const id = req.params.id;
+    const id = +req.params.id;
     const applicant = await Applicant.findByPk(id);
     if (!applicant) {
         return res.status(404).json({
@@ -129,13 +164,14 @@ export const deleteApplicant = async (req: Request, res: Response) => {
     };
 
     try {
-        await Applicant.destroy();
+        await Applicant.destroy({ where: { id: id } });
     } catch (error) {
-        res.status(400).json({
-            message: 'An error occurred while deleting applicant'
+        return res.status(400).json({
+            message: 'An error occurred while deleting applicant',
+            error: error
         });
     };
-    res.status(200).json({
+    return res.status(200).json({
         message: 'Applicant deleted successfully!',
     });
 };
