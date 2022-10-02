@@ -1,38 +1,53 @@
 import sequelize from "../db/db_config";
-import Sequelize from "sequelize";
+import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from "sequelize";
+class User extends Model<InferAttributes<User>, InferCreationAttributes<User>>{
+    declare id: CreationOptional<number>;
+    declare name: string;
+    declare email: string;
+    declare password: string;
+    declare resetPasswordToken: string;
+    declare resetPasswordExpire: Date;
+    declare role: string;
+}
 
-const User = sequelize.define('users', {
+User.init({
     id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         allowNull: false,
         primaryKey: true
     },
     name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     email: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true
     },
     password: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
     },
     resetPasswordToken: {
-        type: Sequelize.STRING
+        type: DataTypes.STRING,
+        allowNull: true
     },
     resetPasswordExpire: {
-        type: Sequelize.DATE
+        type: DataTypes.DATE,
+        allowNull: true
     },
     role: {
-        type: Sequelize.ENUM,
+        type: DataTypes.ENUM,
         defaultValue: 'ROLE_USER',
         values: ['ROLE_USER', 'ROLE_ADMIN'],
         allowNull: false
     }
+}, {
+    tableName: 'users',
+    sequelize
 });
+
 
 export default User;
