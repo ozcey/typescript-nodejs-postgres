@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import User from '../models/user';
+import 'dotenv/config';
 
 export const hashPassword = async (password: string) => {
     const salt = await bcrypt.genSalt(10);
