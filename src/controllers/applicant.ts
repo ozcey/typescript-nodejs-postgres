@@ -92,13 +92,19 @@ export const findApplicantById = async (req: Request, res: Response) => {
     });
 };
 
-// TODO: fix update applicant 
 export const updateApplicant = async (req: Request, res: Response) => {
     const id = +req.params.id;
     const applicant = await Applicant.findByPk(id, { include: Address });
     if (!applicant) {
         return res.status(404).json({
             message: `Applicant not found with id ${id}`
+        });
+    };
+
+    const existingAddress = await Address.findOne({ where: { applicantId: id } });
+    if (!existingAddress) {
+        return res.status(404).json({
+            message: `Address not found with applicant id ${id}`
         });
     };
 
@@ -115,12 +121,8 @@ export const updateApplicant = async (req: Request, res: Response) => {
         address: { street, city, state, zip_code }
     } = req.body;
 
-    console.log('body', req.body);
-
-    let updatedApplicant;
-
     try {
-        updatedApplicant = await Applicant.update({
+        applicant.set({
             first_name,
             last_name,
             email,
@@ -129,20 +131,16 @@ export const updateApplicant = async (req: Request, res: Response) => {
             gender,
             degree,
             categories,
-            languages,
-            addresses: [
-                {
-                    street,
-                    city,
-                    state,
-                    zip_code
-                }
-            ]
-        },
-            {
-                where: { id: id }
-            }
-        );
+            languages
+        });
+        existingAddress.set({
+            street,
+            city,
+            state,
+            zip_code
+        });
+        await applicant.save();
+        await existingAddress.save();
     } catch (error) {
         return res.status(400).json({
             message: 'An error occurred while updating applicant',
@@ -150,8 +148,7 @@ export const updateApplicant = async (req: Request, res: Response) => {
         });
     };
     return res.status(200).json({
-        message: 'Applicant updated successfully!',
-        data: updateApplicant
+        message: 'Applicant updated successfully!'
     });
 
 };

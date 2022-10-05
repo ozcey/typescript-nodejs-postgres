@@ -51,6 +51,8 @@ Address.belongsTo(Applicant, {
     constraints: true,
     onDelete: 'CASCADE'
 });
-Applicant.hasMany(Address);
+Applicant.hasMany(Address, {
+    foreignKey: 'applicantId'
+});
 
 export default Applicant;

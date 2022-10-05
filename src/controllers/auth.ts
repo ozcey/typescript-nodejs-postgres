@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import User from "../models/user";
 import * as auth_util from '../utils/auth_util';
 
-
 export const register = async (req: Request, res: Response) => {
     let user;
     try {
@@ -20,7 +19,7 @@ export const register = async (req: Request, res: Response) => {
 
     } catch (error) {
         return res.status(400).json({
-            message: 'Creating user failed!',
+            message: 'An error occurred while registering user',
             error: error
         });
     }
@@ -94,14 +93,13 @@ export const updateUserDetails = async (req: Request | any, res: Response) => {
         });
     } catch (error) {
         return res.status(400).json({
-            message: 'Updating user details failed!',
+            message: 'An error occurred while updating user details',
             error: error
         });
     }
 
     return res.status(200).json({
-        message: 'User details updated successfully!',
-        data: user
+        message: 'User details updated successfully!'
     });
 };
 
@@ -125,12 +123,11 @@ export const updatePasword = async (req: Request | any, res: Response) => {
         await user.save();
     } catch (error) {
         return res.status(400).json({
-            message: 'Updating password failed!',
+            message: 'An error occurred while ppdating password',
             error: error
         });
     }
     return res.status(200).json({
-        message: 'User password updated successfully!',
-        data: user
+        message: 'User password updated successfully!'
     });
 };
