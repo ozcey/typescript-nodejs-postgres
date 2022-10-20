@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from 'cors';
+import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import sequelize from "./db/db_config";
 import applicantRoute from './routes/applicant';
@@ -21,6 +22,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 app.use(cors());
+app.use(helmet());
 
 app.get('/health', (req: Request, res: Response) => {
     return res.json({ 'status': 'UP' });
