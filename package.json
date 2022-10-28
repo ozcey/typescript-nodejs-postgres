@@ -21,7 +21,7 @@
   "homepage": "https://github.com/ozcey/typescript-nodejs-postgres#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.0",
+    "body-parser": "^1.20.1",
     "cors": "^2.8.5",
     "csrf": "^3.1.0",
     "dotenv": "^16.0.3",
