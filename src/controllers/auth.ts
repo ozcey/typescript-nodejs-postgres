@@ -60,8 +60,8 @@ export const login = async (req: Request, res: Response) => {
 
 
     } catch (error) {
-        return res.status(400).json({
-            message: 'Creating user failed!',
+        return res.status(401).json({
+            message: 'Not authroized!',
             error: error
         });
     }
