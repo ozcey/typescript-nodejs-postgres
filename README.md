@@ -6,6 +6,7 @@
 
 ### Prerequisites
 
+- TypeScript
 - NPM 
 - PostgreSQL
 - Docker
