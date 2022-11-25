@@ -7,6 +7,7 @@
 ### Prerequisites
 
 - NPM 
+- PostgreSQL
 - Docker
 - VS Code or any other text editor
 
