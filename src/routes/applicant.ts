@@ -11,5 +11,3 @@ router.put('/update/:id', verifyToken, applicant.updateApplicant);
 router.delete('/delete/:id', verifyToken, applicant.deleteApplicant);
 
 export default router;
-
-

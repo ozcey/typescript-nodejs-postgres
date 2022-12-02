@@ -1,5 +1,6 @@
 import sequelize from "../db/db_config";
 import { Model, InferAttributes, InferCreationAttributes, CreationOptional, DataTypes } from "sequelize";
+
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>>{
     declare id: CreationOptional<number>;
     declare name: string;
