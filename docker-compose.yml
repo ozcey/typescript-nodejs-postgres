@@ -10,15 +10,14 @@ services:
       - "5000:5000"
     restart: always
     depends_on:
-      - postgres
+      - db
     environment:
-      POSTGRES_HOSTNAME: ${DB_HOST}
-      POSTGRES_PORT: ${DB_PORT}
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASS}
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
 
-  postgres:
+  db:
     image: postgres:13
     ports:
       - "5432:5432"

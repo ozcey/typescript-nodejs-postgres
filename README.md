@@ -47,3 +47,9 @@ To run the application
 ```
 npm run dev
 ```
+
+To run the application on Docker
+
+```
+docker-compose up
+```
