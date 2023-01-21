@@ -7,10 +7,10 @@ export const getUsers = async (req: Request, res: Response) => {
     try {
         users = await User.findAll();
     } catch (error) {
-        return res.status(400).json({ message: 'An error occurred while retrieving users' });
+        return res.status(400).json({ message: 'An error occurred while retrieving users.' });
     }
 
-    return res.status(200).json({ users: users });
+    return res.status(200).json(users);
 };
 
 export const getUserById = async (req: Request, res: Response) => {
@@ -18,10 +18,10 @@ export const getUserById = async (req: Request, res: Response) => {
     try {
         user = await User.findByPk(req.params.id);
     } catch (error) {
-        return res.status(400).json({ message: 'An error occurred while retrieving user' });
+        return res.status(400).json({ message: 'An error occurred while retrieving user.' });
     }
 
-    return res.status(200).json({ user: user });
+    return res.status(200).json(user );
 };
 
 
@@ -42,17 +42,15 @@ export const createUser = async (req: Request, res: Response) => {
 
     } catch (error) {
         return res.status(400).json({
-            message: 'An error occurred while registering user',
+            message: 'An error occurred while registering user.',
             error: error
         });
     }
-    return res.status(201).json({
-        message: 'User cerated successfully',
-        data: user
-    });
+    return res.status(201).json(user);
 };
 
 export const updateUser = async (req: Request, res: Response) => {
+    const id = +req.params.id;
     const { name, email, password, role } = req.body;
     const hash = await auth_util.hashPassword(password);
     let user;
@@ -63,14 +61,14 @@ export const updateUser = async (req: Request, res: Response) => {
             password: hash,
             role: role
         }, {
-            where: { id: req.params.id }
+            where: { id: id }
         });
     } catch (error) {
-        return res.status(400).json({ message: 'An error occurred while updating user' });
+        return res.status(400).json({ message: 'An error occurred while updating user.' });
     }
 
     return res.status(200).json({
-        message: 'User updated successfully!'
+        message:  `User with id: ${id} updated successfully.`
     });
 };
 
@@ -79,7 +77,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     const applicant = await User.findByPk(id);
     if (!applicant) {
         return res.status(404).json({
-            message: `User not found with id ${id}`
+            message: `User not found with id ${id}.`
         });
     };
 
@@ -87,10 +85,10 @@ export const deleteUser = async (req: Request, res: Response) => {
         await User.destroy({ where: { id: id } });
     } catch (error) {
         return res.status(400).json({
-            message: 'An error occurred while deleting user'
+            message: 'An error occurred while deleting user.'
         });
     };
     return res.status(200).json({
-        message: 'User deleted successfully!',
+        message:  `User with id ${id} deleted successfully.`
     });
 };

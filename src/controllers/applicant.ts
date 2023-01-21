@@ -49,10 +49,7 @@ export const createApplicant = async (req: Request, res: Response) => {
             error: error
         });
     };
-    return res.status(201).json({
-        message: 'Applicant created successfully!',
-        data: applicant
-    });
+    return res.status(201).json(applicant);
 
 };
 
@@ -66,9 +63,7 @@ export const findAllApplicants = async (req: Request, res: Response) => {
             error: error
         });
     }
-    return res.status(200).json({
-        applicants
-    });
+    return res.status(200).json(applicants);
 };
 
 export const findApplicantById = async (req: Request, res: Response) => {
@@ -87,9 +82,7 @@ export const findApplicantById = async (req: Request, res: Response) => {
         });
     }
 
-    return res.status(200).json({
-        applicant: applicant
-    });
+    return res.status(200).json(applicant);
 };
 
 export const updateApplicant = async (req: Request, res: Response) => {
@@ -148,9 +141,8 @@ export const updateApplicant = async (req: Request, res: Response) => {
         });
     };
     return res.status(200).json({
-        message: 'Applicant updated successfully!'
+        message: `Applicant with id: ${id} updated successfully.`
     });
-
 };
 
 export const deleteApplicant = async (req: Request, res: Response) => {
@@ -171,6 +163,6 @@ export const deleteApplicant = async (req: Request, res: Response) => {
         });
     };
     return res.status(200).json({
-        message: 'Applicant deleted successfully!',
+        message: `Applicant with id ${id} deleted successfully.`,
     });
 };

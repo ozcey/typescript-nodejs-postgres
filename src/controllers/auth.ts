@@ -23,10 +23,7 @@ export const register = async (req: Request, res: Response) => {
             error: error
         });
     }
-    return res.status(201).json({
-        message: 'User cerated successfully',
-        data: user
-    });
+    return res.status(201).json(user);
 };
 
 export const login = async (req: Request, res: Response) => {
