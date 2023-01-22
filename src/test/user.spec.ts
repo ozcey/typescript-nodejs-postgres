@@ -5,14 +5,14 @@ import { user, user2 } from './test_data';
 let should = chai.should();
 
 chai.use(chaiHttp);
-
+const baseUrl = '/career-center/api';
 let loggedInUserId: number, token: string, userId: number;
 
 describe('User API Tests', () => {
     before(async () => {
         // register as an admin user
         const res = await chai.request(app)
-            .post('/api/auth/signup')
+            .post(baseUrl + '/auth/signup')
             .send(user);
         expect(res.status).to.eq(201);
         expect(res.body.email).to.equals(user.email);
@@ -24,7 +24,7 @@ describe('User API Tests', () => {
             password: user.password
         }
         const loginResponse = await chai.request(app)
-            .post('/api/auth/login')
+            .post(baseUrl + '/auth/login')
             .send(loginRequest);
         expect(loginResponse.status).to.eq(200);
         expect(loginResponse.body).to.have.property('token');
@@ -34,7 +34,7 @@ describe('User API Tests', () => {
 
     after(async () => {
         const res = await chai.request(app)
-            .delete('/api/user/delete/' + loggedInUserId)
+            .delete(baseUrl + '/user/delete/' + loggedInUserId)
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
         expect(res.body.message).to.equals(`User with id: ${loggedInUserId} deleted successfully.`);
@@ -42,7 +42,7 @@ describe('User API Tests', () => {
 
     it('Admin should create a new user', async () => {
         const res = await chai.request(app)
-            .post('/api/auth/signup')
+            .post(baseUrl + '/auth/signup')
             .send(user2)
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(201);
@@ -53,14 +53,14 @@ describe('User API Tests', () => {
 
     it('Admin should retrieve all users', async () => {
         const res = await chai.request(app)
-            .get('/api/user')
+            .get(baseUrl + '/user')
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
     });
 
     it('Admin should retrieve user by id', async () => {
         const res = await chai.request(app)
-            .get('/api/user/' + userId)
+            .get(baseUrl + '/user/' + userId)
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
         expect(res.body.email).to.equals(user2.email);
@@ -75,7 +75,7 @@ describe('User API Tests', () => {
             role: 'ROLE_USER'
         }
         const res = await chai.request(app)
-            .put('/api/user/update/' + userId)
+            .put(baseUrl + '/user/update/' + userId)
             .send(reqBody)
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
@@ -85,7 +85,7 @@ describe('User API Tests', () => {
 
     it('Admin should delete user successfully', async () => {
         const res = await chai.request(app)
-            .delete('/api/user/delete/' + userId)
+            .delete(baseUrl + '/user/delete/' + userId)
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
         expect(res.body.message).to.equals(`User with id: ${userId} deleted successfully.`);

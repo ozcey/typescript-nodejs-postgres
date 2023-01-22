@@ -26,8 +26,8 @@ app.get('/health', (req: Request, res: Response) => {
     return res.json({ 'status': 'UP' });
 });
 
-app.use('/api/applicant', applicantRoute);
-app.use('/api/auth', authRoute);
-app.use('/api/user', userRoute);
+app.use('/career-center/api/applicant', applicantRoute);
+app.use('/career-center/api/auth', authRoute);
+app.use('/career-center/api/user', userRoute);
 
 export default app;

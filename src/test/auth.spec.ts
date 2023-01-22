@@ -5,14 +5,14 @@ import { user } from './test_data';
 let should = chai.should();
 
 chai.use(chaiHttp);
-
+const baseUrl = '/career-center/api';
 let userId: number, token: string;
 
 describe('Auth API Tests', () => {
 
     after(async () => {
         const res = await chai.request(app)
-            .delete('/api/user/delete/' + userId)
+            .delete(baseUrl + '/user/delete/' + userId)
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
         expect(res.body.message).to.equals(`User with id: ${userId} deleted successfully.`);
@@ -20,7 +20,7 @@ describe('Auth API Tests', () => {
 
     it('User should register successfully', async () => {
         const res = await chai.request(app)
-            .post('/api/auth/signup')
+            .post(baseUrl + '/auth/signup')
             .send(user);
         expect(res.status).to.eq(201);
         expect(res.body.email).to.equals(user.email);
@@ -34,7 +34,7 @@ describe('Auth API Tests', () => {
             password: user.password
         }
         const res = await chai.request(app)
-            .post('/api/auth/login')
+            .post(baseUrl + '/auth/login')
             .send(loginRequest);
         expect(res.status).to.eq(200);
         expect(res.body).to.have.property('token');
@@ -43,7 +43,7 @@ describe('Auth API Tests', () => {
 
     it('User should retrieve current logged in user', async () => {
         const res = await chai.request(app)
-            .get('/api/auth/me')
+            .get(baseUrl + '/auth/me')
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
         expect(res.body.email).to.equals(user.email);
@@ -57,7 +57,7 @@ describe('Auth API Tests', () => {
             name: 'Mark Johnson'
         }
         const res = await chai.request(app)
-            .put('/api/auth/updatedetails')
+            .put(baseUrl + '/auth/updatedetails')
             .send(reqBody)
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
@@ -70,7 +70,7 @@ describe('Auth API Tests', () => {
             newPassword: '12345678'
         }
         const res = await chai.request(app)
-            .put('/api/auth/updatepassword')
+            .put(baseUrl + '/auth/updatepassword')
             .send(reqBody)
             .set('Authorization', `Bearer ${token}`);
         expect(res.status).to.eq(200);
