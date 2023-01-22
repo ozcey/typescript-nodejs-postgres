@@ -89,6 +89,6 @@ export const deleteUser = async (req: Request, res: Response) => {
         });
     };
     return res.status(200).json({
-        message:  `User with id ${id} deleted successfully.`
+        message:  `User with id: ${id} deleted successfully.`
     });
 };
