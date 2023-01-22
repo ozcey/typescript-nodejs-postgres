@@ -75,7 +75,7 @@ export const getMe = async (req: Request | any, res: Response) => {
         return res.status(401).json({ message: 'Not authroized!' });
     }
 
-    return res.status(200).json({ data: user });
+    return res.status(200).json(user);
 };
 
 export const updateUserDetails = async (req: Request | any, res: Response) => {

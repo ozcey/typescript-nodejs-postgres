@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
-import sequelize from "./db/db_config";
 import applicantRoute from './routes/applicant';
 import authRoute from './routes/auth';
 import userRoute from './routes/user';
@@ -10,7 +9,6 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: '.env' });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,13 +30,4 @@ app.use('/api/applicant', applicantRoute);
 app.use('/api/auth', authRoute);
 app.use('/api/user', userRoute);
 
-sequelize
-    .sync()
-    .then(() => {
-        app.listen(PORT, () => {
-            console.log(`App running on port ${PORT}`);
-        });
-    })
-    .catch((error) => {
-        console.log(error);
-    });
+export default app;
