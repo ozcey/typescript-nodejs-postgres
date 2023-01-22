@@ -12,6 +12,7 @@ let userId: number, token: string;
 describe('Auth API Tests', () => {
 
     before(async () => {
+        // @ts-ignore
         await User.destroy({
             truncate: true
         });
