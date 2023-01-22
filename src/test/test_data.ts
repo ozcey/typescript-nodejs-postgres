@@ -1,6 +1,7 @@
 export const user = {
     "name": "John Doe",
     "email": "john@gmail.com",
+    "username": "john",
     "password": "password",
     "role": "ROLE_ADMIN"
 };
@@ -8,6 +9,7 @@ export const user = {
 export const user2 = {
     "name": "Sarah Walker",
     "email": "sarah@gmail.com",
+    "username": "sarah",
     "password": "password",
     "role": "ROLE_USER"
 };

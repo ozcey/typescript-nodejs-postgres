@@ -5,6 +5,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>>{
     declare id: CreationOptional<number>;
     declare name: string;
     declare email: string;
+    declare username: string;
     declare password: string;
     declare resetPasswordToken: string;
     declare resetPasswordExpire: Date;
@@ -23,6 +24,11 @@ User.init({
         allowNull: false
     },
     email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true
+    },
+    username: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true

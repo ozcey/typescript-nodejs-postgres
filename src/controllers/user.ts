@@ -28,12 +28,13 @@ export const getUserById = async (req: Request, res: Response) => {
 export const createUser = async (req: Request, res: Response) => {
     let user;
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email,username, password, role } = req.body;
         const hash = await auth_util.hashPassword(password);
 
         user = await User.create({
             name: name,
             email: email,
+            username: username,
             password: hash,
             resetPasswordToken: '',
             resetPasswordExpire: new Date(),
@@ -51,13 +52,14 @@ export const createUser = async (req: Request, res: Response) => {
 
 export const updateUser = async (req: Request, res: Response) => {
     const id = +req.params.id;
-    const { name, email, password, role } = req.body;
+    const { name, email, username, password, role } = req.body;
     const hash = await auth_util.hashPassword(password);
     let user;
     try {
         user = await User.update({
             name: name,
             email: email,
+            username: username,
             password: hash,
             role: role
         }, {

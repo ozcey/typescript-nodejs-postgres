@@ -2,6 +2,7 @@ import chai, { expect } from 'chai';
 import chaiHttp from "chai-http";
 import app from '../app';
 import { user } from './test_data';
+import User from '../models/user';
 let should = chai.should();
 
 chai.use(chaiHttp);
@@ -9,6 +10,12 @@ const baseUrl = '/career-center/api';
 let userId: number, token: string;
 
 describe('Auth API Tests', () => {
+
+    before(async () => {
+        await User.destroy({
+            truncate: true
+        });
+    });
 
     after(async () => {
         const res = await chai.request(app)
@@ -24,13 +31,14 @@ describe('Auth API Tests', () => {
             .send(user);
         expect(res.status).to.eq(201);
         expect(res.body.email).to.equals(user.email);
+        expect(res.body.username).to.equals(user.username);
         expect(res.body).to.have.property('id');
         userId = res.body.id;
     });
 
     it('User should log in successfully', async () => {
         const loginRequest = {
-            email: user.email,
+            username: user.username,
             password: user.password
         }
         const res = await chai.request(app)
@@ -53,7 +61,7 @@ describe('Auth API Tests', () => {
 
     it('User should update user details', async () => {
         const reqBody = {
-            email: 'mark@gmail.com',
+            username: 'mark',
             name: 'Mark Johnson'
         }
         const res = await chai.request(app)

@@ -5,12 +5,13 @@ import * as auth_util from '../utils/auth_util';
 export const register = async (req: Request, res: Response) => {
     let user;
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, username, password, role } = req.body;
         const hash = await auth_util.hashPassword(password);
 
         user = await User.create({
             name: name,
             email: email,
+            username: username,
             password: hash,
             resetPasswordToken: '',
             resetPasswordExpire: new Date(),
@@ -27,22 +28,22 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { username, password } = req.body;
+    if (!username || !password) {
         return res.status(400).json({
-            message: `Please provide a valid email or password`
+            message: `Please provide a valid username or password`
         });
     };
     let user, token;
 
     try {
         user = await User.findOne({
-            where: { email: email }
+            where: { username: username }
         });
 
         if (!user) {
             return res.status(404).json({
-                message: `User not found with email ${email}`
+                message: `User not found with username ${username}`
             });
         };
 
@@ -79,11 +80,11 @@ export const getMe = async (req: Request | any, res: Response) => {
 };
 
 export const updateUserDetails = async (req: Request | any, res: Response) => {
-    const { email, name } = req.body;
+    const { username, name } = req.body;
     let user;
     try {
         user = await User.update({
-            email: email,
+            username: username,
             name: name
         }, {
             where: { id: req.userData.id }

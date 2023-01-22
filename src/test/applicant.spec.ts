@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import chaiHttp from "chai-http";
 import app from '../app';
+import User from '../models/user';
 import { user, applicant, applicant2 } from './test_data';
 let should = chai.should();
 
@@ -11,6 +12,10 @@ let loggedInUserId: number, token: string, applicantId: number;
 
 describe('Applicant API Tests', () => {
     before(async () => {
+        // delete all records
+        await User.destroy({
+            truncate: true
+        });
         // register as an admin user
         const res = await chai.request(app)
             .post(baseUrl + '/auth/signup')
@@ -21,7 +26,7 @@ describe('Applicant API Tests', () => {
         loggedInUserId = res.body.id;
         // login as an admin user
         const loginRequest = {
-            email: user.email,
+            username: user.username,
             password: user.password
         }
         const loginResponse = await chai.request(app)
